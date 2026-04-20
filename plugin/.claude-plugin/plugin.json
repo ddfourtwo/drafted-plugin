@@ -1,0 +1,13 @@
+{
+  "name": "drafted",
+  "version": "1.0.0",
+  "description": "Visual canvas for design work — Claude creates, edits, and organizes HTML designs, wireframes, and brand systems on a real-time surface at drafted.live.",
+  "author": {
+    "name": "Mind Athletic BV",
+    "email": "support@drafted.live"
+  },
+  "homepage": "https://drafted.live",
+  "repository": "https://github.com/ddfourtwo/drafted",
+  "license": "MIT",
+  "keywords": ["design", "canvas", "wireframes", "html", "ux", "brand-system", "creative"]
+}

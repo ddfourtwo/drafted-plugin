@@ -1,0 +1,24 @@
+{
+  "name": "drafted",
+  "owner": {
+    "name": "Mind Athletic BV",
+    "email": "support@drafted.live",
+    "url": "https://drafted.live"
+  },
+  "metadata": {
+    "description": "Visual canvas for design work — Drafted plugin for Claude Code.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "drafted",
+      "source": "./plugin",
+      "description": "Multi-tenant design canvas for Claude. Create, edit, and organize HTML/markdown frames on a real-time surface at drafted.live. Bundles the remote MCP connector + 4 slash commands (/drafted:status, /drafted:share, /drafted:new-project, /drafted:focus) + a Drafted skill that teaches Claude how to use the canvas effectively.",
+      "category": "design",
+      "keywords": ["design", "canvas", "wireframes", "html", "ux", "brand-system", "creative"],
+      "homepage": "https://drafted.live",
+      "license": "MIT",
+      "strict": false
+    }
+  ]
+}

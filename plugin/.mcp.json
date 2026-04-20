@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "drafted": {
+      "command": "${CLAUDE_PLUGIN_DATA}/node_modules/.bin/drafted-mcp"
+    }
+  }
+}
