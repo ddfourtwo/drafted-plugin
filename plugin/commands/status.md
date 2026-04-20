@@ -4,7 +4,7 @@ description: Show what Drafted project is active and what's recently changed
 
 Use the Drafted MCP to give a quick status summary:
 
-1. Call `list_projects` and identify the active project (look at `agentProject`).
+1. Call `list_projects` and identify the active project (look at `activeProject`).
 2. If there's an active project, call `ls /` to show the layer structure.
 3. Show the user:
    - Active project name + ID

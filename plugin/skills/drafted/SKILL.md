@@ -60,7 +60,14 @@ Every read/write operates on the active project. `list_projects` first to find o
 3. `edit` with line hashes for surgical changes →
 4. `focus` so the user sees the change
 
-### Apply a brand voice / style guide
+### Lean on the org skill library
+
+Drafted has a built-in skill library — reusable agent instructions (brand voice, review checklists, data-viz rules, naming conventions) scoped to the user's org. Every agent in the org sees the same skills. Two rules:
+
+1. **Before deriving guidance from scratch, check.** If the user asks for something that sounds like a recurring rule (brand voice, tone, review checklist, component naming, layout grid), call `search_skills query: "<topic>"` first. If a match exists, `load_skill skill: "<slug>"` and follow it. Don't re-invent what the team already encoded.
+2. **When you establish a rule, offer to save it.** If the user states a reusable preference ("we always put CTAs below the fold", "our captions are sentence case") and no skill covers it, suggest `/drafted:save-skill` so teammates and future agents inherit the rule automatically.
+
+Applying an existing skill:
 1. `search_skills query: "brand"` →
 2. `load_skill skill: "<slug>"` →
 3. Optionally `read_skill_file` for examples →
