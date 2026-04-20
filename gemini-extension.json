@@ -1,0 +1,12 @@
+{
+  "name": "drafted",
+  "version": "1.1.0",
+  "description": "Design surface for AI agents. Render HTML/Markdown/image frames on a zoomable, real-time canvas — with skills, connectors, and templates.",
+  "mcpServers": {
+    "drafted": {
+      "command": "npx",
+      "args": ["-y", "-p", "drafted@latest", "drafted-mcp"],
+      "timeout": 30000
+    }
+  }
+}
