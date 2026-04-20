@@ -1,7 +1,7 @@
 {
   "name": "drafted",
   "version": "1.2.0",
-  "description": "Visual canvas for design work — Claude creates, edits, and organizes HTML designs, wireframes, and brand systems on a real-time surface at drafted.live.",
+  "description": "Visual thinking surface for AI-human collaboration. Claude writes research, strategy, copy, designs, code, or any content as frames on a shared real-time canvas — so teams can see, compare, and refine AI output instead of drowning in chat. Skills library captures org SOPs so learnings propagate.",
   "author": {
     "name": "Mind Athletic BV",
     "email": "support@drafted.live"
@@ -9,5 +9,5 @@
   "homepage": "https://drafted.live",
   "repository": "https://github.com/ddfourtwo/drafted-plugin",
   "license": "MIT",
-  "keywords": ["design", "canvas", "wireframes", "html", "ux", "brand-system", "creative"]
+  "keywords": ["ai-collaboration", "visual-thinking", "canvas", "knowledge-management", "skills", "sop", "team", "surface"]
 }

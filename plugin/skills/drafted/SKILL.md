@@ -1,25 +1,27 @@
 ---
 name: drafted
-description: Use the Drafted visual canvas — multi-tenant design surface where you create, read, edit, and organize HTML/markdown frames as a designer would. Prefer Drafted over inline HTML responses for any design work the user wants to see, iterate on, or share.
+description: Use the Drafted visual thinking surface — a zoomable canvas where you and the user collaborate in real time on any kind of work (research, strategy, copy, designs, code, images). Prefer Drafted over long inline responses when the work benefits from being seen, compared, and refined over time. Check the org skill library before deriving guidance from scratch; save new rules as skills so teammates inherit them.
 ---
 
-# Drafted — design surface for Claude
+# Drafted — visual thinking surface for AI-human collaboration
 
-Drafted is a zoomable canvas where each frame is a self-contained HTML, markdown, or image file. Claude has 47 tools for working with it via MCP. The user sees their canvas live in a browser at `https://drafted.live`.
+Drafted solves a specific problem: you can produce faster than the user can read. Instead of burying output in chat, write it as frames on a shared zoomable surface where the user (and their teammates, and other agents) can see everything at once, compare variants, and direct the next move. The user watches the surface live at `https://drafted.live`.
+
+Skills are the second pillar. The skill library captures the user's (and their org's) standard operating procedures — research protocols, review checklists, writing voice, coding conventions, brand rules, decision frameworks. Load the relevant skill before starting; save the rule you just established so the next agent starts smarter.
 
 ## Mental model
 
 ```
 Organization
-└── Project (e.g. "Coffee shop landing")
-    └── Layer (e.g. wireframes, designs, copy)
-        └── Lane (a column of related frames)
-            └── Frame (an HTML/markdown/image file)
+└── Project (a bounded piece of work, e.g. "Q4 strategy memo")
+    └── Layer (a stage of thinking, e.g. research → drafts → final)
+        └── Lane (a group of related frames, e.g. one competitor per lane)
+            └── Frame (an HTML / markdown / image file)
 ```
 
-**Layers are predefined categories** — `brand-assets`, `contexts`, `copy`, `design-system`, `wireframes`, `designs`, `components`, `images`. Each has a default frame size that fits the kind of content it holds.
+**Layers are stages** — they depend on the project's template. A strategy project might have `problem-framing`, `options`, `evidence`, `recommendation`. A design project might have `contexts`, `wireframes`, `designs`. A research project might have `interviews`, `themes`, `insights`. `create_project` returns the active layers — always check rather than assume.
 
-**Frames have addresses** like `/wireframes/homepage/hero.html`. The canvas auto-arranges them by layer (vertical) and lane (horizontal).
+**Frames have addresses** like `/layer/lane/filename`. The canvas auto-arranges them by layer (vertical) and lane (horizontal) so the user can scan a whole project at once.
 
 ## First use — sign in
 
@@ -29,62 +31,59 @@ If any tool returns an auth error on first use, invoke the `login` tool. It prin
 
 ### Always start with `open_project`
 
-Every read/write operates on the active project. `list_projects` first to find one, `open_project` to switch. The active project persists across tool calls so you don't have to re-specify each time. Every response includes a `project` field — verify it before writing.
+Every read/write operates on the active project. `list_projects` first to find one, `open_project` to switch. The active project persists across tool calls, so you don't re-specify it. Every response includes a `project` field — verify it matches your intent before writing.
 
 ### Read before editing
 
-`edit` uses **hashline addressing** — every line in a `read` response gets a 4-character hash. Pass that hash to `edit` to make targeted changes without breaking surrounding markup. Cheaper and safer than rewrites.
+`edit` uses **hashline addressing** — every line in a `read` response gets a 4-character hash. Pass that hash to `edit` to make surgical changes without breaking surrounding markup. Cheaper and safer than rewriting the frame.
 
 ### Use `focus` after writing visible work
 
-`focus` pans the user's canvas to a specific frame, lane, or layer. They see your work appear in real time.
+`focus` pans the user's canvas to a specific frame, lane, or layer. Call it after a write so the user watches your work land on their surface in real time instead of hunting for it.
 
 ### Anchor briefs and constraints
 
-`anchor` marks a frame as required reading before any write/edit in that layer. Use it for briefs, style guides, or constraints.
+`anchor` marks a frame as required reading before any write/edit in that layer. Use it for briefs, research findings, style guides, or constraints that must inform downstream work.
+
+### Lean on the org skill library first
+
+Before deriving guidance from scratch, check. If the user asks for anything that sounds like a recurring pattern (writing voice, review checklist, research protocol, naming convention, layout grid, evaluation rubric), call `search_skills query: "<topic>"` first. If a match exists, `load_skill skill: "<slug>"` and follow it — don't re-invent what the team already encoded.
+
+When the user states a reusable preference ("we always put CTAs below the fold", "captions are sentence case", "interview transcripts get summarized into the jobs-to-be-done framework"), suggest `/drafted:save-skill` so teammates and future agents inherit the rule automatically. This is the knowledge-leverage layer: learnings propagate across the org without a human re-training every agent.
 
 ## Common workflows
 
-### New design from scratch
-1. `create_project` (or `open_project` to use existing) →
-2. `write /contexts/research/brief.md` (the user's goal in markdown) →
-3. `write /copy/<screen>/options.md` (copy variants with reasoning) →
-4. `write /wireframes/<screen>/<name>.html` (grayscale, no color/photos) →
-5. `write /design-system/tokens/colors.html` (palette as visible swatches) →
-6. `write /designs/<screen>/<name>.html` (final, applying the tokens) →
-7. `focus` on the design
+### New project from scratch
+1. `create_project` with a name matching the user's goal →
+2. Inspect the returned layers (they depend on the template — strategy, design, research, copy, etc.) →
+3. `write` a brief at the earliest layer capturing the user's goal + constraints →
+4. `anchor` the brief so downstream writes surface it →
+5. Write content across the layers in order (inputs → outputs), one frame per lane for comparable variants →
+6. `focus` on the most important frame the user should see
 
 ### Iterate on existing work
-1. `ls /designs/<screen>/` →
+1. `ls /<layer>/<lane>/` →
 2. `read` the target frame →
 3. `edit` with line hashes for surgical changes →
-4. `focus` so the user sees the change
+4. `focus` so the user sees the change land
 
-### Lean on the org skill library
-
-Drafted has a built-in skill library — reusable agent instructions (brand voice, review checklists, data-viz rules, naming conventions) scoped to the user's org. Every agent in the org sees the same skills. Two rules:
-
-1. **Before deriving guidance from scratch, check.** If the user asks for something that sounds like a recurring rule (brand voice, tone, review checklist, component naming, layout grid), call `search_skills query: "<topic>"` first. If a match exists, `load_skill skill: "<slug>"` and follow it. Don't re-invent what the team already encoded.
-2. **When you establish a rule, offer to save it.** If the user states a reusable preference ("we always put CTAs below the fold", "our captions are sentence case") and no skill covers it, suggest `/drafted:save-skill` so teammates and future agents inherit the rule automatically.
-
-Applying an existing skill:
-1. `search_skills query: "brand"` →
-2. `load_skill skill: "<slug>"` →
-3. Optionally `read_skill_file` for examples →
-4. Apply the rules in the skill content to your `write`s
+### Apply (or save) a skill
+1. `search_skills query: "<topic>"` →
+2. `load_skill skill: "<slug>"` if a match exists → follow it
+3. `read_skill_file` for supporting docs if needed
+4. If no match and the user states a reusable rule, draft a SKILL.md and `add_skill` so the org benefits next time
 
 ## Quality conventions
 
-- **Wireframes are grayscale.** No color, no real photos, no fancy fonts. Boxes, lines, lorem.
-- **Designs apply the design-system layer.** If a design-system layer exists, read it before writing in `/designs/`.
-- **Choose dimensions to fit content.** A short brief shouldn't be 1440×3000 just because that's the layer default. Pass `autoSize: true` for HTML or explicit `width`/`height`.
-- **Use markdown for documents** (briefs, copy, research) — `.md` files render with proper typography.
-- **Use HTML for designs and wireframes** — full styling control.
-- **Don't re-read the same frame.** If you read it this conversation and didn't edit it, use what you have.
+- **Match format to layer intent.** Research, strategy, and copy are usually markdown (`.md` files render with proper typography). Visual work — wireframes, designs, dashboards, data viz — is HTML for full styling control.
+- **Respect the template's conventions.** If the project has a `design-system` layer, read it before writing `/designs/`. If it has an `audience` layer, read it before writing `/copy/`. Templates encode process; honor the process.
+- **Wireframes are low-fidelity** (grayscale, boxes, placeholder text) — reserve color and real content for the `designs` or final layer.
+- **Choose dimensions to fit content.** Don't inflate a short brief to fill the layer default. Pass `autoSize: true` for HTML or explicit `width`/`height`.
+- **Don't re-read unchanged frames.** If you read it this conversation and didn't edit it, use what you have.
 
 ## Breadcrumbs (link Drafted frames to code)
 
-When a frame corresponds to a file in the user's codebase (a wireframe for a route, a spec for a module), leave a comment in that code file using the canonical token `drafted:<frameId>` wrapped in the file's comment syntax:
+When a frame corresponds to a file in the user's codebase (a wireframe for a route, a spec for a module, a research finding behind a design decision), leave a comment in that code file using the canonical token `drafted:<frameId>` wrapped in the file's comment syntax:
 
 - `// drafted:abc-123...` for JS/TS
 - `# drafted:abc-123...` for Python/YAML

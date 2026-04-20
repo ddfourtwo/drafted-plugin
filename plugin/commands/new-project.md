@@ -1,20 +1,22 @@
 ---
-description: Bootstrap a new Drafted project with a brief and starter frames
-argument-hint: <project name and optional one-line description>
+description: Start a new project on the Drafted surface — any kind of work (research, strategy, copy, design, code)
+argument-hint: <project name and optional one-line description of what you want to do>
 ---
 
-The user wants to spin up a new design project. Their goal: $ARGUMENTS
+The user wants to spin up a new project on their Drafted surface. Their goal: $ARGUMENTS
 
-1. Call `create_project` with a name derived from the user's input. Pick a clean name (Title Case, no awkward punctuation). Use the user's wording for the description if they gave one.
-2. The response includes the new project ID and `frameUrl`. Call `open_project` on it to switch.
-3. Write a short brief at `/contexts/research/brief.md` capturing:
-   - What the user described
-   - Implied goals / audience (your reasoning, kept brief)
+Drafted handles any kind of structured thinking, not just design. Figure out the project type from the user's intent first: research synthesis, strategic decision, copywriting, competitive analysis, content calendar, user research, brand identity, programming, web design, image generation, or something else.
+
+1. Call `create_project` with a clean name (Title Case, no awkward punctuation) derived from the user's goal. Inspect the returned layers — they depend on the template.
+2. Call `open_project` on the new project ID.
+3. Write a short brief at the earliest input layer (usually `/contexts/research/brief.md`, `/research/brief.md`, `/problem-framing/brief.md`, or similar — use the actual layer key from the create_project response). Capture:
+   - What the user described (in their words)
+   - Implied goals / audience / success criteria (your reasoning, kept brief)
    - Any constraints they mentioned
+   6-12 lines of useful markdown. Not a placeholder.
+4. `anchor path: "<brief path>", anchored: true` so future writes/edits in this project surface the brief.
+5. Check the skill library with `search_skills query: "<project type>"` — if a relevant org skill exists, mention it so the user knows they can `load_skill` for guidance.
+6. `focus` on the brief so the user sees it land on their surface.
+7. Reply with: project URL, brief frame URL, any matching skill slug, and one line: "Next: tell me what to do."
 
-   Use markdown. Make it useful as a starting point — 6-12 lines, not a placeholder.
-4. Anchor the brief with `anchor path: "/contexts/research/brief.md", anchored: true` so future writes/edits in this project surface it.
-5. Call `focus` on the brief so the user sees it on their canvas.
-6. Reply with: project URL, the brief frame URL, and a one-line "Next: tell me what to design."
-
-Don't speculatively scaffold wireframes or designs yet — wait for the user to direct.
+Don't speculatively scaffold downstream frames (wireframes, drafts, recommendations) — wait for the user to direct. The brief + active project is enough to start.

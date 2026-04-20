@@ -1,7 +1,7 @@
 {
   "name": "drafted",
   "version": "1.2.0",
-  "description": "Design surface for AI agents. Render HTML/Markdown/image frames on a zoomable, real-time canvas — with skills, connectors, and templates.",
+  "description": "Visual thinking surface for AI-human collaboration. Render any frame — research, strategy, copy, designs, code, images — on a zoomable, real-time canvas that teams share with the agents working alongside them. Skills library captures org SOPs so the team's best patterns propagate.",
   "mcpServers": {
     "drafted": {
       "command": "npx",
