@@ -7,7 +7,7 @@
     "email": "support@drafted.live"
   },
   "homepage": "https://drafted.live",
-  "repository": "https://github.com/ddfourtwo/drafted",
+  "repository": "https://github.com/ddfourtwo/drafted-plugin",
   "license": "MIT",
   "keywords": ["design", "canvas", "wireframes", "html", "ux", "brand-system", "creative"]
 }
