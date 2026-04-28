@@ -1,9 +1,0 @@
-{
-  "name": "drafted-plugin-deps",
-  "version": "1.0.0",
-  "private": true,
-  "description": "Pinned dependencies for the Drafted Claude Code plugin. Installed into ${CLAUDE_PLUGIN_DATA}/node_modules by the SessionStart hook.",
-  "dependencies": {
-    "drafted": "latest"
-  }
-}
