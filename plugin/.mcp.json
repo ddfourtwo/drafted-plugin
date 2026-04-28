@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "drafted": {
-      "command": "${CLAUDE_PLUGIN_DATA}/node_modules/.bin/drafted-mcp"
+      "command": "${CLAUDE_PLUGIN_ROOT}/bin/drafted-mcp-launcher.sh"
     }
   }
 }
