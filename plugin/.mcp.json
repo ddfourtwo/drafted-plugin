@@ -1,8 +1,11 @@
 {
   "mcpServers": {
     "drafted": {
-      "type": "http",
-      "url": "https://drafted.live/mcp"
+      "command": "drafted-mcp",
+      "args": [],
+      "env": {
+        "DRAFTED_SERVER": "https://drafted.live"
+      }
     }
   }
 }

@@ -1,11 +1,11 @@
 ---
 name: drafted
-description: Use the Drafted visual thinking surface — a zoomable canvas where you and the user collaborate in real time on any kind of work (research, strategy, copy, designs, code, images). Prefer Drafted over long inline responses when the work benefits from being seen, compared, and refined over time. Check the org skill library before deriving guidance from scratch; save new rules as skills so teammates inherit them.
+description: Use the Drafted visual thinking surface where you and the user collaborate in real time on research, strategy, copy, designs, code, images, docs, sheets, and decks. Prefer Drafted frames over long inline responses for substantive artifacts; when Google Drive is connected, prefer Google Workspace frames for docs, sheets, and slides. Check the org skill library before deriving guidance from scratch; save new rules as skills so teammates inherit them.
 ---
 
 # Drafted — visual thinking surface for AI-human collaboration
 
-Drafted solves a specific problem: you can produce faster than the user can read. Instead of burying output in chat, write it as frames on a shared zoomable surface where the user (and their teammates, and other agents) can see everything at once, compare variants, and direct the next move. The user watches the surface live at `https://drafted.live`.
+Drafted solves a specific problem: you can produce faster than the user can read. Instead of burying output in chat, write substantive artifacts as frames on a shared zoomable surface where the user (and their teammates, and other agents) can see everything at once, compare variants, and direct the next move. The user watches the surface live at `https://drafted.live`.
 
 Skills are the second pillar. The skill library captures the user's (and their org's) standard operating procedures — research protocols, review checklists, writing voice, coding conventions, brand rules, decision frameworks. Load the relevant skill before starting; save the rule you just established so the next agent starts smarter.
 
@@ -32,6 +32,21 @@ If any tool returns an auth error on first use, invoke the `login` tool. It prin
 ### Always start with `open_project`
 
 Every read/write operates on the active project. `list_projects` first to find one, `open_project` to switch. The active project persists across tool calls, so you don't re-specify it. Every response includes a `project` field — verify it matches your intent before writing.
+
+
+### Default to the surface for substantive artifacts
+
+When the user asks you to draft, write, plan, analyze, compare, design, document, summarize, report, spec, model, or make a deck/table, create or update Drafted frames by default instead of leaving the durable result only in chat. Prefer one visible frame per artifact or artifact section so the user can review and refine the work on the surface.
+
+### Prefer Google Workspace when Drive is connected
+
+Call `get_org` before choosing an output format. If it reports `googleDrive.connected: true`, strongly prefer Google Workspace frames for business artifacts:
+
+- `google-doc` for memos, reports, briefs, SOPs, proposals, and long-form documents
+- `google-sheet` for tables, trackers, budgets, research matrices, and models
+- `google-slide` for decks and presentation outlines
+
+Create them with `frame(action="write", googleType="google-doc" | "google-sheet" | "google-slide", path="/{layer}/{lane}/{filename}", title="...")` after opening the project. Use normal Drafted HTML/markdown frames for visual layouts, diagrams, web/UI mockups, or when Google Drive is not connected.
 
 ### Read before editing
 
