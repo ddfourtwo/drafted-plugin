@@ -1,13 +1,23 @@
 ---
 name: drafted
-description: Use the Drafted visual thinking surface where you and the user collaborate in real time on research, strategy, copy, designs, code, images, docs, sheets, and decks. Prefer Drafted frames over long inline responses for substantive artifacts; when Google Drive is connected, prefer Google Workspace frames for docs, sheets, and slides. Check the org skill library before deriving guidance from scratch; save new rules as skills so teammates inherit them.
+description: Use the Drafted producibles harness — a compounding workspace that uplifts any AI across three primitives: knowledge (the org wiki), procedures (skills), and the project surface (frames on a shared real-time canvas). Prime from the harness before working, build durable artifacts as frames instead of burying output in chat, and deposit what you learned back so the next session starts smarter. When Google Drive is connected, prefer Google Workspace frames for docs, sheets, and slides.
 ---
 
-# Drafted — visual thinking surface for AI-human collaboration
+# Drafted — a producibles harness that compounds
 
-Drafted solves a specific problem: you can produce faster than the user can read. Instead of burying output in chat, write substantive artifacts as frames on a shared zoomable surface where the user (and their teammates, and other agents) can see everything at once, compare variants, and direct the next move. The user watches the surface live at `https://drafted.live`.
+Drafted makes any AI more effective by giving it a memory and a workspace that get better with use. It has three primitives that layer:
 
-Skills are the second pillar. The skill library captures the user's (and their org's) standard operating procedures — research protocols, review checklists, writing voice, coding conventions, brand rules, decision frameworks. Load the relevant skill before starting; save the rule you just established so the next agent starts smarter.
+- **Knowledge — the org wiki.** Durable facts, decisions, conventions. *More knowledge = less searching.*
+- **Procedures — skills.** Reusable SOPs the org has encoded. *Better skills = more stable process.*
+- **Surface — projects.** Reviewable work as frames on a shared zoomable canvas the user watches live at `https://drafted.live`. *Reusable projects + anchors = velocity with accuracy.*
+
+The point is the **compounding loop**: you don't produce in a vacuum, you draw on what the org already knows and leave it richer each pass.
+
+## The loop — prime → build → compound
+
+- **Prime (session start).** Pull accumulated value in. The system *enforces* this: you must search the wiki before working, and a project's attached skills, anchored frames, and layer rules are auto-loaded when you open it. Don't fight the gates — they make you start smart.
+- **Build (the work).** Produce artifacts as frames on the surface.
+- **Compound (session end / when you notice something).** Deposit learning back: capture knowledge, distill or fix a skill, harden the project. This is *your* responsibility — the system can't force it, so do it.
 
 ## Mental model
 
@@ -19,97 +29,56 @@ Organization
             └── Frame (an HTML / markdown / image file)
 ```
 
-**Layers are stages** — they depend on the project's template. A strategy project might have `problem-framing`, `options`, `evidence`, `recommendation`. A design project might have `contexts`, `wireframes`, `designs`. A research project might have `interviews`, `themes`, `insights`. `create_project` returns the active layers — always check rather than assume.
+**Layers are stages** — they depend on the project's template. `project(action="create")` returns the active layers; always check rather than assume. **Frames have addresses** like `/layer/lane/filename`; the canvas auto-arranges them by layer (vertical) and lane (horizontal).
 
-**Frames have addresses** like `/layer/lane/filename`. The canvas auto-arranges them by layer (vertical) and lane (horizontal) so the user can scan a whole project at once.
+## The gates you'll encounter (and how to satisfy them)
 
-## First use — sign in
+These reset every session. A gate that blocks you tells you exactly what to call next — do it, don't work around it.
 
-If any tool returns an auth error on first use, invoke the `login` tool. It prints a one-time URL. Hand that URL to the user to open in their browser, they sign in via magic link, and `login` completes. The token is cached in `~/.drafted/auth.json` — one-time only.
+- **G1 — wiki search before work.** Before you read or edit anything, `wiki(action="search")` for relevant org knowledge.
+- **G2 — prior-art before a new skill.** `skill(action="add")` requires a `skill(action="search")` first.
+- **G3 — prior-art before a new project.** `project(action="create")` requires wiki + skill + `template(action="list")` searches first.
+- **G4 — attached skills** are auto-injected when you open a project. Follow them — they're how the org does this work.
+- **G5 — the project's anchored frames** are auto-injected on open. They are required reading (briefs, constraints, style guides).
+- **G6 — a layer's rules** are surfaced when you work in that layer. Honor them.
 
-## Workflow primitives
+## The commands (when to reach for each)
 
-### Always start with `open_project`
+These bookend the loop. Prime/feed at the start, deposit at the end.
 
-Every read/write operates on the active project. `list_projects` first to find one, `open_project` to switch. The active project persists across tool calls, so you don't re-specify it. Every response includes a `project` field — verify it matches your intent before writing.
+- `/drafted:onboard-drafted` — first run: orient + bootstrap the harness (seed wiki, starter skills, first project).
+- `/drafted:ingest` — bring knowledge into the wiki (a research output, existing documents, or by interrogating the user).
+- `/drafted:create-skill` — capture a repeatable procedure (with knowledge + prior-art search).
+- `/drafted:create-project` — start a project or a reusable template (with knowledge/skill/template search).
+- `/drafted:improve-wiki` — fix stale / wrong / fragmented knowledge.
+- `/drafted:improve-skill` — fix a skill that underperformed.
+- `/drafted:improve-project-harness` — turn corrections into enforced gates (anchors / attached skills / layer rules).
+- `/drafted:extract` — session-end: deposit knowledge, a skill, and/or a template (the user picks which).
 
+## Tool surface (action-based)
 
-### Default to the surface for substantive artifacts
+`project(list|open|create|update|move)` · `frame(read|write|edit|anchor|mv|search|…)` · `ls` · `skill(search|load|list|add|update|attach|…)` · `wiki(search|read|write|edit|mv|links|log|…)` · `template(list|create|fork|…)` · `focus` · `get_org` · `asset` · `layer`.
 
-When the user asks you to draft, write, plan, analyze, compare, design, document, summarize, report, spec, model, or make a deck/table, create or update Drafted frames by default instead of leaving the durable result only in chat. Prefer one visible frame per artifact or artifact section so the user can review and refine the work on the surface.
+## Sign in
 
-### Prefer Google Workspace when Drive is connected
+If a tool returns an auth error: on a desktop/CLI agent run the `auth(action="login")` tool (it prints a one-time URL; the user opens it). On the web/Cowork connector, authorization happens via the connector's OAuth — ask the user to re-authorize the Drafted connector in their settings, then retry.
 
-Call `get_org` before choosing an output format. If it reports `googleDrive.connected: true`, strongly prefer Google Workspace frames for business artifacts:
+## Working on the surface
 
-- `google-doc` for memos, reports, briefs, SOPs, proposals, and long-form documents
-- `google-sheet` for tables, trackers, budgets, research matrices, and models
-- `google-slide` for decks and presentation outlines
-
-Create them with `frame(action="write", googleType="google-doc" | "google-sheet" | "google-slide", path="/{layer}/{lane}/{filename}", title="...")` after opening the project. Use normal Drafted HTML/markdown frames for visual layouts, diagrams, web/UI mockups, or when Google Drive is not connected.
-
-### Read before editing
-
-`edit` uses **hashline addressing** — every line in a `read` response gets a 4-character hash. Pass that hash to `edit` to make surgical changes without breaking surrounding markup. Cheaper and safer than rewriting the frame.
-
-### Use `focus` after writing visible work
-
-`focus` pans the user's canvas to a specific frame, lane, or layer. Call it after a write so the user watches your work land on their surface in real time instead of hunting for it.
-
-### Anchor briefs and constraints
-
-`anchor` marks a frame as required reading before any write/edit in that layer. Use it for briefs, research findings, style guides, or constraints that must inform downstream work.
-
-### Lean on the org skill library first
-
-Before deriving guidance from scratch, check. If the user asks for anything that sounds like a recurring pattern (writing voice, review checklist, research protocol, naming convention, layout grid, evaluation rubric), call `search_skills query: "<topic>"` first. If a match exists, `load_skill skill: "<slug>"` and follow it — don't re-invent what the team already encoded.
-
-When the user states a reusable preference ("we always put CTAs below the fold", "captions are sentence case", "interview transcripts get summarized into the jobs-to-be-done framework"), suggest `/drafted:save-skill` so teammates and future agents inherit the rule automatically. This is the knowledge-leverage layer: learnings propagate across the org without a human re-training every agent.
-
-## Common workflows
-
-### New project from scratch
-1. `create_project` with a name matching the user's goal →
-2. Inspect the returned layers (they depend on the template — strategy, design, research, copy, etc.) →
-3. `write` a brief at the earliest layer capturing the user's goal + constraints →
-4. `anchor` the brief so downstream writes surface it →
-5. Write content across the layers in order (inputs → outputs), one frame per lane for comparable variants →
-6. `focus` on the most important frame the user should see
-
-### Iterate on existing work
-1. `ls /<layer>/<lane>/` →
-2. `read` the target frame →
-3. `edit` with line hashes for surgical changes →
-4. `focus` so the user sees the change land
-
-### Apply (or save) a skill
-1. `search_skills query: "<topic>"` →
-2. `load_skill skill: "<slug>"` if a match exists → follow it
-3. `read_skill_file` for supporting docs if needed
-4. If no match and the user states a reusable rule, draft a SKILL.md and `add_skill` so the org benefits next time
+- **Always `project(action="open")` first.** Every read/write operates on the active project. Use `project(action="list")` to find one. Every response includes a `project` field — verify it matches your intent before writing.
+- **Default to the surface for substantive artifacts.** When asked to draft, write, plan, analyze, compare, design, document, summarize, report, spec, model, or make a deck/table, create or update frames instead of leaving the durable result only in chat. One visible frame per artifact or section.
+- **Prefer Google Workspace when Drive is connected.** Call `get_org`; if it reports `googleDrive.connected: true`, use `frame(action="write", googleType="google-doc"|"google-sheet"|"google-slide", …)` for docs, sheets, and decks; populate immediately with the native write actions.
+- **Read before editing.** `frame(action="edit")` uses hashline addressing — every line in a `frame(action="read")` response gets a 4-char hash; pass it to edit for surgical changes.
+- **`focus` after writing** so the user watches your work land on their surface.
 
 ## Quality conventions
 
-- **Match format to layer intent.** Research, strategy, and copy are usually markdown (`.md` files render with proper typography). Visual work — wireframes, designs, dashboards, data viz — is HTML for full styling control.
-- **Respect the template's conventions.** If the project has a `design-system` layer, read it before writing `/designs/`. If it has an `audience` layer, read it before writing `/copy/`. Templates encode process; honor the process.
-- **Wireframes are low-fidelity** (grayscale, boxes, placeholder text) — reserve color and real content for the `designs` or final layer.
-- **Choose dimensions to fit content.** Don't inflate a short brief to fill the layer default. Pass `autoSize: true` for HTML or explicit `width`/`height`.
-- **Don't re-read unchanged frames.** If you read it this conversation and didn't edit it, use what you have.
-
-## Breadcrumbs (link Drafted frames to code)
-
-When a frame corresponds to a file in the user's codebase (a wireframe for a route, a spec for a module, a research finding behind a design decision), leave a comment in that code file using the canonical token `drafted:<frameId>` wrapped in the file's comment syntax:
-
-- `// drafted:abc-123...` for JS/TS
-- `# drafted:abc-123...` for Python/YAML
-- `<!-- drafted:abc-123... -->` for HTML/Markdown
-
-Project-level: use `drafted-project:<projectId>` in the project README or CLAUDE.md.
-
-Future agents grep for `drafted:` and discover the linked frame, then `read(<frameId>)` to fetch it.
-
-Skip breadcrumbs for throwaway or exploratory frames.
+- **Match format to layer intent.** Research/strategy/copy are usually markdown; visual work (wireframes, designs, dashboards) is HTML.
+- **Respect the template's conventions.** Read a `design-system` layer before `/designs/`; read an `audience` layer before `/copy/`.
+- **Wireframes are low-fidelity** (grayscale, placeholders); reserve color and real content for the designs/final layer.
+- **Choose dimensions to fit content** — `autoSize: true` for HTML, or explicit `width`/`height`.
+- **Don't re-read unchanged frames** you already have this conversation.
 
 ## Surface URL recognition
 
-Any URL containing `/f/{uuid}` is a Drafted frame link. **Always use `read(path=URL)`** to get its content and `focus(target=URL)` to pan the user's canvas to it. Never `curl` or `WebFetch` Drafted URLs — the MCP tools authenticate properly.
+Any URL containing `/f/{uuid}` is a Drafted frame link. Use `frame(action="read", path=URL)` to get its content and `focus(target=URL)` to pan the canvas to it. Never `WebFetch` Drafted URLs — the MCP tools authenticate properly.

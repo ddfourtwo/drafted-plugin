@@ -7,13 +7,13 @@
   },
   "metadata": {
     "description": "Visual thinking surface for AI-human collaboration — Drafted plugin for Claude Code.",
-    "version": "1.7.26"
+    "version": "1.8.0"
   },
   "plugins": [
     {
       "name": "drafted",
       "source": "./plugin",
-      "description": "Visual thinking surface for AI-human collaboration. Claude writes research, strategy, copy, designs, code, or any other content as frames on a shared real-time canvas — so teams can see, compare, and refine AI output without drowning in chat. Skills library captures org SOPs so the team's best patterns propagate automatically. Bundles the MCP server + a Drafted skill + six slash commands (/drafted:status, /drafted:share, /drafted:new-project, /drafted:focus, /drafted:skills, /drafted:save-skill).",
+      "description": "Visual thinking surface for AI-human collaboration. Claude writes research, strategy, copy, designs, code, or any other content as frames on a shared real-time canvas — so teams can see, compare, and refine AI output without drowning in chat. Skills library captures org SOPs so the team's best patterns propagate automatically. Bundles the MCP server + the Drafted skill + eight slash commands (/drafted:onboard-drafted, /drafted:ingest, /drafted:create-skill, /drafted:create-project, /drafted:improve-wiki, /drafted:improve-skill, /drafted:improve-project-harness, /drafted:extract).",
       "category": "productivity",
       "keywords": [
         "ai-collaboration",
