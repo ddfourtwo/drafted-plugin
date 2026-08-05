@@ -12,9 +12,9 @@ First decide WHAT to ingest. If it's obvious from the conversation (a research r
 3. **Interrogate the user** (grill-me) — when the knowledge is in their head. Interview relentlessly, walking ONE branch of the decision tree at a time and proposing your recommended answer at each step, until you reach shared understanding. Then structure what you captured.
 
 Then deposit:
-- `wiki(action="search")` first (3-5 paraphrased queries) so you don't fragment existing pages.
+- `fs(search, path/o/<org>/wiki", query="<terms>")` first (3-5 paraphrased queries) so you don't fragment existing pages.
 - Propose the page set to the user before writing.
-- Write with `wiki(action="write")`, or `wiki(action="source-register")` + `wiki(action="bulk-write")` for a batch. Cross-link related pages.
-- `wiki(action="log")` a one-line entry for the ingest.
+- Write with `fs(write, path/o/<org>/wiki/<path>", content=...)` per page. Cross-link related pages.
+- Confirm what landed where, with the page links.
 
 The wiki is the org's durable knowledge — write for the next agent and teammate, not just this session.

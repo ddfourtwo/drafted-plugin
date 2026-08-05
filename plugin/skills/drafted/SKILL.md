@@ -1,6 +1,6 @@
 ---
 name: drafted
-description: Use the Drafted producibles harness — a compounding workspace that uplifts any AI across three primitives: knowledge (the org wiki), procedures (skills), and the project surface (frames on a shared real-time canvas). Prime from the harness before working, build durable artifacts as frames instead of burying output in chat, and deposit what you learned back so the next session starts smarter. When Google Drive is connected, prefer Google Workspace frames for docs, sheets, and slides.
+description: Use the Drafted producibles harness — a compounding workspace that uplifts any AI across three primitives: knowledge (the org wiki), procedures (skills), and the project surface (frames on a shared real-time canvas). Drafted is navigated like a filesystem — one fs tool, one path grammar, org first: `fs(ls, path="/")` lists your orgs, then `/o/<org>/<root>/...`. Prime from the harness before working, build durable artifacts as frames instead of burying output in chat, and deposit what you learned back so the next session starts smarter. When Google Drive is connected, prefer Google Workspace frames for docs, sheets, and slides.
 ---
 
 # Drafted — a producibles harness that compounds
@@ -13,33 +13,37 @@ Drafted makes any AI more effective by giving it a memory and a workspace that g
 
 The point is the **compounding loop**: you don't produce in a vacuum, you draw on what the org already knows and leave it richer each pass.
 
+## The surface is a filesystem — one tool, one path grammar
+
+There is exactly **one** tool to know: `fs`. It looks, feels, and behaves like a local filesystem, and an **org is the top folder** — you address an org, you never switch to it:
+
+```
+fs(ls, path="/")                                   → the orgs you belong to
+fs(ls, path="/o/<org>")                            → that org's wiki · skills · projects
+/o/<org>/wiki/<path>                                org knowledge pages (markdown, free nesting)
+/o/<org>/skills/<slug>                              reusable procedures (flat: one dir per skill)
+/o/<org>/projects/<project>/<layer>/<lane>/<file>   frames on the surface (project → layer → lane → file)
+```
+
+Verbs: `ls` (list) · `read` (cat, hashline-annotated) · `write` (create/overwrite) · `edit` (hashline ops) · `mv` (rename/move) · `rm` (move to archive) · `mkdir` (create a project) · `search` (grep).
+
+**A project is a folder.** It starts with **no layers** — writing to `/o/<org>/projects/<name>/<layer>/...` auto-creates the layer (mkdir -p). The agent defines the filesystem structure by writing into it. URLs are the same paths: `https://drafted.live/o/<org>/projects/<project>/<layer>/<lane>/<file>` — the URL's pathname IS the fs path (one canonical link for both humans and agents). Bare `/wiki`, `/skills`, `/projects` roots still work via the session's working org.
+
 ## The loop — prime → build → compound
 
-- **Prime (session start).** Pull accumulated value in. The system *enforces* this: you must search the wiki before working, and a project's attached skills, anchored frames, and layer rules are auto-loaded when you open it. Don't fight the gates — they make you start smart.
+- **Prime (session start).** Pull accumulated value in. The system *enforces* this: you must search the wiki before working (G1), and a project's attached skills and anchored frames are required reading when you open it. Don't fight the gates — they make you start smart.
 - **Build (the work).** Produce artifacts as frames on the surface.
 - **Compound (session end / when you notice something).** Deposit learning back: capture knowledge, distill or fix a skill, harden the project. This is *your* responsibility — the system can't force it, so do it.
-
-## Mental model
-
-```
-Organization
-└── Project (a bounded piece of work, e.g. "Q4 strategy memo")
-    └── Layer (a stage of thinking, e.g. research → drafts → final)
-        └── Lane (a group of related frames, e.g. one competitor per lane)
-            └── Frame (an HTML / markdown / image file)
-```
-
-**Layers are stages** — they depend on the project's template. `project(action="create")` returns the active layers; always check rather than assume. **Frames have addresses** like `/layer/lane/filename`; the canvas auto-arranges them by layer (vertical) and lane (horizontal).
 
 ## The gates you'll encounter (and how to satisfy them)
 
 These reset every session. A gate that blocks you tells you exactly what to call next — do it, don't work around it.
 
-- **G1 — wiki search before work.** Before you read or edit anything, `wiki(action="search")` for relevant org knowledge.
-- **G2 — prior-art before a new skill.** `skill(action="add")` requires a `skill(action="search")` first.
-- **G3 — prior-art before a new project.** `project(action="create")` requires wiki + skill + `template(action="list")` searches first.
+- **G1 — wiki search before work.** Before reading or editing anything, `fs(search, path="/o/<org>/wiki", query="<terms>")` for relevant org knowledge.
+- **G2 — prior-art before a new skill.** Writing a new `/o/<org>/skills/<slug>` requires `fs(search, path="/o/<org>/skills", query="<topic>")` first.
+- **G3 — prior-art before a new project.** Creating a project requires wiki + skill searches first.
 - **G4 — attached skills** are auto-injected when you open a project. Follow them — they're how the org does this work.
-- **G5 — the project's anchored frames** are auto-injected on open. They are required reading (briefs, constraints, style guides).
+- **G5 — the project's anchored frames** are required reading (briefs, constraints, style guides).
 - **G6 — a layer's rules** are surfaced when you work in that layer. Honor them.
 
 ## The commands (when to reach for each)
@@ -55,30 +59,30 @@ These bookend the loop. Prime/feed at the start, deposit at the end.
 - `/drafted:improve-project-harness` — turn corrections into enforced gates (anchors / attached skills / layer rules).
 - `/drafted:extract` — session-end: deposit knowledge, a skill, and/or a template (the user picks which).
 
-## Tool surface (action-based)
-
-`project(list|open|create|update|move)` · `frame(read|write|edit|anchor|mv|search|…)` · `ls` · `skill(search|load|list|add|update|attach|…)` · `wiki(search|read|write|edit|mv|links|log|…)` · `template(list|create|fork|…)` · `focus` · `get_org` · `asset` · `layer`.
-
-## Sign in
-
-If a tool returns an auth error: on a desktop/CLI agent run the `auth(action="login")` tool (it prints a one-time URL; the user opens it). On the web/Cowork connector, authorization happens via the connector's OAuth — ask the user to re-authorize the Drafted connector in their settings, then retry.
-
 ## Working on the surface
 
-- **Always `project(action="open")` first.** Every read/write operates on the active project. Use `project(action="list")` to find one. Every response includes a `project` field — verify it matches your intent before writing.
+- **Navigate by path, exactly like a filesystem.** `fs(ls, path="/")` to see your orgs; `fs(ls, path="/o/<org>/projects")` to see a project list; `fs(ls, path="/o/<org>/projects/<project>")` for layers/lanes; `fs(ls, path="/o/<org>/projects/<project>/<layer>")` for frames. The project is resolved from the path itself — no separate "open" step.
+- **Create a project with `fs(mkdir, path="/o/<org>/projects/<name>")`** — or just `fs(write, path="/o/<org>/projects/<name>/<layer>/<lane>/<file>", content=...)` and the project + layer auto-create in the addressed org.
 - **Default to the surface for substantive artifacts.** When asked to draft, write, plan, analyze, compare, design, document, summarize, report, spec, model, or make a deck/table, create or update frames instead of leaving the durable result only in chat. One visible frame per artifact or section.
-- **Prefer Google Workspace when Drive is connected.** Call `get_org`; if it reports `googleDrive.connected: true`, use `frame(action="write", googleType="google-doc"|"google-sheet"|"google-slide", …)` for docs, sheets, and decks; populate immediately with the native write actions.
-- **Read before editing.** `frame(action="edit")` uses hashline addressing — every line in a `frame(action="read")` response gets a 4-char hash; pass it to edit for surgical changes.
-- **`focus` after writing** so the user watches your work land on their surface.
+- **Read before editing.** `fs(read)` returns every line hashline-annotated (`1abc|<content>`); `fs(edit, ops=[{type:"replace", lineHash:"1abc", newContent:"..."}])` targets exactly that line. For partial reads, pass `lines: "2-50"` — you get back just that range, still hash-annotated, and can edit within it.
+- **Prefer Google Workspace when Drive is connected.** Use `fs(write, path=".../<name>.google-doc"|".google-sheet"|".google-slide")` for docs, sheets, and decks; populate immediately with the matching native write action.
+- **`fs(mv, from="/o/<org>/projects/<p>/<layer>/<lane>/<file>", to="...")`** renames or moves (cross-project too). **`fs(rm, path="/o/<org>/projects/<project>")` archives** — agents never hard-delete; the archive is in the web UI.
+- **Return a clickable link** for what you touched — the `frameUrl`/`projectUrl` in the fs response is the URL the user opens.
 
 ## Quality conventions
 
 - **Match format to layer intent.** Research/strategy/copy are usually markdown; visual work (wireframes, designs, dashboards) is HTML.
-- **Respect the template's conventions.** Read a `design-system` layer before `/designs/`; read an `audience` layer before `/copy/`.
 - **Wireframes are low-fidelity** (grayscale, placeholders); reserve color and real content for the designs/final layer.
 - **Choose dimensions to fit content** — `autoSize: true` for HTML, or explicit `width`/`height`.
 - **Don't re-read unchanged frames** you already have this conversation.
+- **Diagrams: prefer native Excalidraw.** For flowcharts, process maps, architecture/system/data-flow diagrams, or visual maps, write a `.excalidraw` file (scene JSON) and load the `excalidraw-drafted` skill for the authoring guidance. Use HTML/markdown frames for web/UI mockups, rich layouts, or non-editable artifacts.
+
+## Skill authoring
+
+- **Author reusable skills in Drafted, not just the local repo.** The portable part — the method, SKILL.md, and script source — belongs in the Drafted skill library: `fs(write, path="/o/<org>/skills/<slug>", content=...)` for a new skill (G2 gate first), or `fs(mv, path="/o/<org>/skills/<old>", to="/o/<org>/skills/<new>")` to rename. Declare how to rebuild in the skill's `setup:` frontmatter so any machine or agent can regenerate it.
+- **Machine-specific build output is never portable.** Build `node_modules`, downloaded browsers, compiled binaries into a `.skillinstall/` directory inside the skill — Drafted always strips it on push and skill push auto-gitignores it, so the rebuildable bundle stays local while the method and recipe live in Drafted.
+- **Improve skills when you find a better way.** Fix or distill a skill that underperformed rather than leaving it stale.
 
 ## Surface URL recognition
 
-Any URL containing `/f/{uuid}` is a Drafted frame link. Use `frame(action="read", path=URL)` to get its content and `focus(target=URL)` to pan the canvas to it. Never `WebFetch` Drafted URLs — the MCP tools authenticate properly.
+Any URL containing `/f/{uuid}` is a Drafted frame link — `fs(read, path=URL)` gets its content. Canonical links are the fs paths themselves: `/o/<org>/wiki/...`, `/o/<org>/skills/<slug>`, `/o/<org>/projects/<project>/<layer>/<lane>/<file>`. Never `WebFetch` Drafted URLs — the MCP tools authenticate properly.
