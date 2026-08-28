@@ -7,7 +7,7 @@ Session-end deposit. Harvest what's durable from this conversation back into the
 
 Review the session, then **present the user options for which store(s) to deposit into** — don't auto-decide. Offer any that apply:
 
-- **Knowledge → wiki** — durable facts, decisions, or findings worth keeping. Search first (`fs(search, path/o/<org>/wiki", ...)`) to avoid fragmenting, then `fs(write, path/o/<org>/wiki/<path>", ...)`.
+- **Knowledge → wiki** — durable facts, decisions, or findings worth keeping. Search first (`fs(search, path="/o/<org>/wiki", ...)`) to avoid fragmenting, then `fs(write, path="/o/<org>/wiki/<path>", ...)`.
 - **Procedure → skill** — a repeatable way of working that emerged. Follow `/drafted:create-skill`.
 - **Template → surface** — a reusable project structure that emerged. Build it as a project via `fs(mkdir, ...)` + frames.
 
