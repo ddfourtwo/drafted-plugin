@@ -14,7 +14,7 @@ Search before creating (also satisfies the gates):
 Then:
 - Create the project — a project is a folder: `fs(mkdir, path="/o/<org>/projects/<name>")`. It starts with **no layers**; you define them by writing into them.
 - `fs(write, path="/o/<org>/projects/<name>/<layer>/<lane>/brief.md", content=...)` a real brief at the earliest layer (goal, audience, constraints — 6-12 lines, not a placeholder). The layer + lane auto-create.
-- Attach the relevant skills you found via the skill gates.
+- Attach the relevant skills you found; anchor any that agents must read before they write.
 - `fs(ls, path="/o/<org>/projects/<name>")` to confirm the structure, and hand the user the `projectUrl` from the response.
 
 For a **template**: build the layer structure + anchored guidance, then note how to fork it next time. Don't speculatively fill downstream frames — wait for direction.

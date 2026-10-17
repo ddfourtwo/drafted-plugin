@@ -31,7 +31,7 @@ Verbs: `ls` (list) · `read` (cat, hashline-annotated) · `write` (create/overwr
 
 ## The loop — prime → build → compound
 
-- **Prime (session start).** Pull accumulated value in. The system *enforces* this: you must search the wiki before working (G1), and a project's attached skills and anchored frames are required reading when you open it. Don't fight the gates — they make you start smart.
+- **Prime (session start).** Pull accumulated value in. The system *enforces* this: you must search the wiki before working (G1), and the skills anchored to an org, folder or project must be read before you change content there (a refused write returns HTTP 428 `anchor_gate` with the rule text; read the skill, then retry). Don't fight the gates — they make you start smart.
 - **Build (the work).** Produce artifacts as frames on the surface.
 - **Compound (session end / when you notice something).** Deposit learning back: capture knowledge, distill or fix a skill, harden the project. This is *your* responsibility — the system can't force it, so do it.
 
@@ -42,8 +42,8 @@ These reset every session. A gate that blocks you tells you exactly what to call
 - **G1 — wiki search before work.** Before reading or editing anything, `fs(search, path="/o/<org>/wiki", query="<terms>")` for relevant org knowledge.
 - **G2 — prior-art before a new skill.** Writing a new `/o/<org>/skills/<slug>` requires `fs(search, path="/o/<org>/skills", query="<topic>")` first.
 - **G3 — prior-art before a new project.** Creating a project requires wiki + skill searches first.
-- **G4 — attached skills** are auto-injected when you open a project. Follow them — they're how the org does this work.
-- **G5 — the project's anchored frames** are required reading (briefs, constraints, style guides).
+- **G4 — anchored skills** gate every content write (frames, wiki pages, skills) in the scope they are anchored to: an org, a folder or a project. The refusal (HTTP 428 `anchor_gate`) carries the rule text and the `fs(read)` path of each skill; read them, then retry. Editing a skill re-arms the gate. They are how the org does this work.
+- **G5 — the project's anchored frames** are suggested reading (briefs, constraints, style guides). The server does not enforce them.
 - **G6 — a layer's rules** are surfaced when you work in that layer. Honor them.
 
 ## The commands (when to reach for each)
