@@ -88,6 +88,7 @@ Local sessions may have Google's Workspace CLI, `gws`, signed in **read-only** t
 - **Wireframes are low-fidelity** (grayscale, placeholders); reserve color and real content for the designs/final layer.
 - **Choose dimensions to fit content** — `autoSize: true` for HTML, or explicit `width`/`height`.
 - **Don't re-read unchanged frames** you already have this conversation.
+- **Trust your frames; screenshot only to debug.** A write returns `renderHealth` (`ok`, `warnings`, `errors`), and that is the check. Don't `screenshot` a frame after writing it as routine verification. Reach for it when something is wrong: `renderHealth` reports a problem, the user reports a visual defect, or a frame misbehaves and you need to see why.
 - **Diagrams: prefer native Excalidraw.** For flowcharts, process maps, architecture/system/data-flow diagrams, or visual maps, write a `.excalidraw` file (scene JSON) and load the `excalidraw-drafted` skill for the authoring guidance. Use HTML/markdown frames for web/UI mockups, rich layouts, or non-editable artifacts.
 
 ## Skill authoring
