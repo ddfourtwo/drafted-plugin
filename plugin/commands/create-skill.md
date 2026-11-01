@@ -15,4 +15,4 @@ Then define a PROPER procedure, not a vague note:
 - success criteria / what "done right" looks like,
 - written in the second person so any agent can follow it directly. Keep it sharp (~40 lines).
 
-Show the draft to the user with a proposed `name` (Title Case), one-line `description`, `tags` (3-5), and `triggerPatterns`. After approval, write it with `fs(write, path="/o/<org>/skills/<slug>", content=...)` — the slug is derived from the name. Confirm with the slug and note it will auto-surface on matching tasks.
+Show the draft to the user with a proposed `name` (Title Case), one-line `description`, `tags` (3-5), and `triggerPatterns`. After approval, write it with `fs(write, path="/o/<org>/skills/<slug>", content=...)` — the slug is derived from the name. Confirm with the slug and note it will auto-surface on matching outcomes.
